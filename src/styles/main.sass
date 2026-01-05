@@ -1,16 +1,19 @@
-@import "normalize.css/normalize"
-@import "@fortawesome/fontawesome-free/css/all"
-@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Source+Code+Pro:ital,wght@0,400;0,900;1,400;1,900&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap")
-@import _tokens
+@use "sass:color"
+@use "sass:meta"
+@use "normalize.css/normalize"
+@use "@fortawesome/fontawesome-free/css/all"
+@use "_tokens"
 
-@import _admin
-@import _charts
-@import _filters
-@import _fixed-at-bottom
-@import _loading
-@import _navigation
-@import _popovers
-@import _react-date-range-theme-overrides
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Source+Code+Pro:ital,wght@0,400;0,900;1,400;1,900&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap")
+
+@include meta.load-css("_admin")
+@include meta.load-css("_charts")
+@include meta.load-css("_filters")
+@include meta.load-css("_fixed-at-bottom")
+@include meta.load-css("_loading")
+@include meta.load-css("_navigation")
+@include meta.load-css("_popovers")
+@include meta.load-css("_react-date-range-theme-overrides")
 
 html
   width: 100%
@@ -20,9 +23,9 @@ html
 body
   width: 100%
   height: 100%
-  background-color: $main-background
-  color: $main-text-color
-  font-family: $body-font, monospace
+  background-color: tokens.$main-background
+  color: tokens.$main-text-color
+  font-family: tokens.$body-font, monospace
   line-height: 1.2
 
 #__next
@@ -34,7 +37,7 @@ main
   min-height: 100%
 
 main.use-sans-serif
-  font-family: $sans-serif-body-font, sans-serif
+  font-family: tokens.$sans-serif-body-font, sans-serif
   font-size: 18px
 
 *
@@ -54,9 +57,9 @@ button
   cursor: pointer
 
 h1, h1 a, h1 button
-  font-family: $display-font, serif
+  font-family: tokens.$display-font, serif
   margin-top: 0
-  color: $title-color
+  color: tokens.$title-color
   text-decoration: none
 
   &:hover,
@@ -65,7 +68,7 @@ h1, h1 a, h1 button
 
 a
   text-decoration: none
-  color: $main-link-color
+  color: tokens.$main-link-color
 
   &:hover,
   &:focus
@@ -83,7 +86,7 @@ footer.page-footer
 header.page-header,
 footer.page-footer
   display: flex
-  background-color: $header-footer-background
+  background-color: tokens.$header-footer-background
   justify-content: center
   align-items: center
   min-height: 80px
@@ -104,8 +107,8 @@ footer.page-footer
   border-bottom: none
 
   a
-    border-bottom: 0.0625em dashed lighten($header-footer-background, 20%)
-    color: $header-footer-link-color
+    border-bottom: 0.0625em dashed color.adjust(tokens.$header-footer-background, $lightness: 20%)
+    color: tokens.$header-footer-link-color
 
     &:hover, &:focus
       border-bottom-style: solid
@@ -185,7 +188,7 @@ article.timeline
   left: calc(50% - 2px) // 50% - 1/2 width
   height: 100%
   width: 4px
-  background: $timeline-line-color
+  background: tokens.$timeline-line-color
 
 .timeline-entry
   position: relative
@@ -209,7 +212,7 @@ article.timeline
   width: 40px
   height: 40px
   margin-left: -20px
-  border: 4px solid $timeline-line-color
+  border: 4px solid tokens.$timeline-line-color
   border-radius: 50%
   box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.4)
   text-align: center
@@ -218,7 +221,7 @@ article.timeline
   pointer-events: auto
 
   i
-    color: $timeline-icon-color
+    color: tokens.$timeline-icon-color
     font-size: 20px
 
   .icon-wrapper
@@ -238,23 +241,23 @@ article.timeline
   position: relative
   box-sizing: border-box
   width: 45%
-  background-color: $card-background
+  background-color: tokens.$card-background
   padding-top: 20px
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.1)
   display: inline-block
   pointer-events: auto
-  border: 1px solid $timeline-line-color
+  border: 1px solid tokens.$timeline-line-color
 
   &.highlighted
-    border: 3px solid $timeline-highlight-color
-    box-shadow: 0px 0px 10px 0px $timeline-highlight-glow-color
+    border: 3px solid tokens.$timeline-highlight-color
+    box-shadow: 0px 0px 10px 0px tokens.$timeline-highlight-glow-color
     
     &::after
-      border-color: $timeline-highlight-color
+      border-color: tokens.$timeline-highlight-color
 
   &::after
-    background-color: $card-background
-    border-color: $timeline-line-color
+    background-color: tokens.$card-background
+    border-color: tokens.$timeline-line-color
 
   button.define-target
     user-select: text // Fixes issue selecting defined terms in Firefox
@@ -278,8 +281,8 @@ article.timeline
   .entry-footer
     clear: both
     margin-top: 15px
-    border-top: 1px solid $timeline-line-color
-    background-color: $card-footer-background
+    border-top: 1px solid tokens.$timeline-line-color
+    background-color: tokens.$card-footer-background
 
   .collection-row, .tags
     display: flex
@@ -289,22 +292,22 @@ article.timeline
 
     button
       font-style: italic
-      color: $main-link-color
+      color: tokens.$main-link-color
 
   .collection-row
     display: flex
     justify-content: space-between
     padding: 5px
-    border-bottom: 1px solid transparentize($timeline-line-color, 0.5)
+    border-bottom: 1px solid color.adjust(tokens.$timeline-line-color, $alpha: -0.5)
 
     a > i.fa-twitter
-      color: $main-text-color
+      color: tokens.$main-text-color
 
   .tags
     padding: 5px
 
     .fa-hashtag
-      color: $timestamp-color
+      color: tokens.$timestamp-color
       font-size: 80%
       margin-right: 5px
 
@@ -317,7 +320,7 @@ article.timeline
         flex-shrink: 0
 
       &:not(:first-child):before
-        color: $timeline-line-color
+        color: tokens.$timeline-line-color
         content: "|"
         padding: 0 5px
 
@@ -332,14 +335,14 @@ article.timeline
   h2, h2 > button
     font-weight: 900
     line-height: 110%
-    color: $main-text-color
+    color: tokens.$main-text-color
     margin: 5px 0
     -webkit-margin-before: 5px
     -webkit-margin-after: 5px
 
     a
       text-decoration: none
-      color: $main-text-color
+      color: tokens.$main-text-color
 
       &:hover
         text-decoration: none
@@ -356,22 +359,22 @@ img
   &.on-dark
     // For images that show poorly on light mode -- adds dark bg
     padding: 5px
-    background-color: $dark-card-background
+    background-color: tokens.$dark-card-background
 
   &.on-light
     // For images that show poorly on dark mode -- adds light bg
     padding: 5px
-    background-color: $card-background
+    background-color: tokens.$card-background
 
 .timestamp-and-link-icons
   display: flex
   justify-content: space-between
   align-items: center
   font-size: 80%
-  color: $timestamp-color
+  color: tokens.$timestamp-color
 
   i
-    color: $timestamp-color
+    color: tokens.$timestamp-color
 
     &.starred-entry
       color: #FAB034
@@ -393,9 +396,9 @@ img
 .permalink-popup
   display: inline
   margin-right: 5px
-  font-family: $body-font
-  color: $timestamp-color
-  background-color: transparentize($card-background, 0.3)
+  font-family: tokens.$body-font
+  color: tokens.$timestamp-color
+  background-color: color.adjust(tokens.$card-background, $alpha: -0.3)
 
 .captioned-image
   clear: both
@@ -437,7 +440,7 @@ img
   font-size: 18px
 
 .sub-navigation-bar
-  background-color: $filterbar-background
+  background-color: tokens.$filterbar-background
   box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1)
 
   .contents
@@ -450,7 +453,7 @@ img
     justify-content: space-between
 
     button.back-bar-item
-      color: $accent
+      color: tokens.$accent
       cursor: pointer
       white-space: nowrap
       padding-right: 5px
@@ -475,7 +478,7 @@ img
   a[href^="https://"], a[href^="http://"], a[href^="https://en.wikipedia.org/"]
 
     &::after
-      color: $timestamp-color
+      color: tokens.$timestamp-color
       margin-left: 0.125em
       vertical-align: middle
 
@@ -555,8 +558,8 @@ td.number
     // If show-on-focus gets used in more places, these styling rules can
     // be broken out into different styles.
   padding: 16px !important
-  background-color: $accent !important
-  color: $title-color !important
+  background-color: tokens.$accent !important
+  color: tokens.$title-color !important
   top: 0
   left: 0
 
@@ -564,7 +567,7 @@ td.number
   padding-bottom: 10px
 
   &::before
-    background: linear-gradient(180deg, $timeline-line-color 25%, $main-background 25%, $main-background 50%, $timeline-line-color 50%, $timeline-line-color 75%, $main-background 75%, $main-background 100%)
+    background: linear-gradient(180deg, tokens.$timeline-line-color 25%, tokens.$main-background 25%, tokens.$main-background 50%, tokens.$timeline-line-color 50%, tokens.$timeline-line-color 75%, tokens.$main-background 75%, tokens.$main-background 100%)
     background-size: 100% 16px
 
 .load-top
@@ -573,8 +576,8 @@ td.number
 
   button, a.button
     margin: 10px 0
-    background-color: $accent
-    color: $title-color
+    background-color: tokens.$accent
+    color: tokens.$title-color
     padding: 5px 10px
     border: 0
     box-shadow: 2px 2px 1px rgba(0, 0, 0, 0.4)
@@ -611,21 +614,21 @@ td.number
     margin: 0
 
   &.highlighted
-    background-color: $highlight-background
+    background-color: tokens.$highlight-background
     padding: 5px
 
 // Contribute
 table
   width: 100%
-  border: 1px solid $timeline-line-color
+  border: 1px solid tokens.$timeline-line-color
   border-collapse: collapse
 
   th, td
-    border: 1px solid $timeline-line-color
+    border: 1px solid tokens.$timeline-line-color
     padding: 5px
 
   .estimate
-    color: $timestamp-color
+    color: tokens.$timestamp-color
 
 .donations-bar-wrapper
   margin-top: 20px
@@ -676,7 +679,7 @@ table
     *
       height: 20px
       padding: 4px 5px 4px 0
-      border-right: 1px solid $timeline-line-color
+      border-right: 1px solid tokens.$timeline-line-color
       line-height: 1
 
       &.filler
@@ -710,12 +713,12 @@ table
 
 /* ICON COLORS */
 .timeline-icon
-  @each $name, $color in $icon-colors
+  @each $name, $color in tokens.$icon-colors
     &.#{$name}
       background-color: $color
 
 /* RESPONSIVENESS */
-@media only screen and (min-width: #{$md-breakpoint + 1}px)
+@media only screen and (min-width: #{tokens.$md-breakpoint + 1}px)
   .timeline-entry.even 
     .timeline-description:after
       right: -8px
@@ -744,7 +747,7 @@ table
       max-width: 1000px
       width: 80%
 
-@media only screen and (max-width: #{$md-breakpoint}px) and (min-width: #{$xs-breakpoint + 1}px)
+@media only screen and (max-width: #{tokens.$md-breakpoint}px) and (min-width: #{tokens.$xs-breakpoint + 1}px)
   .timeline-entry.even
     .timeline-description:after
       left: -8px
@@ -756,7 +759,7 @@ table
       border-bottom-width: 3px
       border-left-width: 3px
 
-@media only screen and (min-width: #{$xs-breakpoint + 1}px)
+@media only screen and (min-width: #{tokens.$xs-breakpoint + 1}px)
   .timeline-description:after
     top: 14px
     content: ''
@@ -784,7 +787,7 @@ table
     float: right
     padding: 10px 0 5px 10px
 
-@media only screen and (max-width: #{$md-breakpoint}px)
+@media only screen and (max-width: #{tokens.$md-breakpoint}px)
   header.page-header
     h1
       font-size: 1.5em
@@ -848,7 +851,7 @@ table
     .tweet-assets
       margin-left: 0
 
-@media only screen and (max-width: #{$sm-breakpoint}px)
+@media only screen and (max-width: #{tokens.$sm-breakpoint}px)
   header.page-header
     height: auto
     padding-top: 20px
@@ -880,7 +883,7 @@ table
           max-width: 100px
 
 // Small mobile
-@media only screen and (max-width: #{$xs-breakpoint}px)
+@media only screen and (max-width: #{tokens.$xs-breakpoint}px)
   .captioned-image
     margin: 20px auto
     text-align: center
@@ -966,29 +969,29 @@ table
 // DARK MODE
 @mixin mainDarkMode()
   main
-    background-color: $dark-main-background
+    background-color: tokens.$dark-main-background
 
   header.page-header,
   header.page-header .header-content,
   footer.page-footer
-    background-color: $dark-header-footer-background
+    background-color: tokens.$dark-header-footer-background
 
     h1, h1 a, h1 button, p, ul
-      color: $dark-header-footer-body-color
+      color: tokens.$dark-header-footer-body-color
 
     img.logo
       filter: brightness(80%)
 
   header.page-header .header-content
     a
-      border-bottom: 0.0625em dashed lighten($header-footer-background, 20%)
-      color: $dark-header-footer-link-color
+      border-bottom: 0.0625em dashed color.adjust(tokens.$header-footer-background, $lightness: 20%)
+      color: tokens.$dark-header-footer-link-color
 
     h1 a, h1 button
       border-bottom: none
 
   header.page-header.timeline-page li:not(:first-child):before
-    color: $dark-header-footer-body-color
+    color: tokens.$dark-header-footer-body-color
 
   body,
   .timeline-description,
@@ -996,101 +999,297 @@ table
   .timeline-icon i,
   .content-wrapper,
   .attribution
-    color: $dark-main-color
+    color: tokens.$dark-main-color
 
     h2,
     h2 > button,
     h2 > button a
-      color: $dark-main-color
+      color: tokens.$dark-main-color
 
   a,
   .timeline-description a,
   .attribution a
-    color: $dark-link-color
+    color: tokens.$dark-link-color
 
   .sub-navigation-bar
-    background-color: $dark-filterbar-background
-    color: $dark-filter-text
+    background-color: tokens.$dark-filterbar-background
+    color: tokens.$dark-filter-text
 
     .contents button.back-bar-item
-      color: $dark-link-color
+      color: tokens.$dark-link-color
 
   .timeline-description
-    background-color: $dark-card-background
-    border-color: $dark-timeline-line-color
+    background-color: tokens.$dark-card-background
+    border-color: tokens.$dark-timeline-line-color
 
     &.highlighted
-      border-color: $dark-timeline-highlight-color
-      box-shadow: 0px 0px 10px 0px $dark-timeline-highlight-glow-color 
+      border-color: tokens.$dark-timeline-highlight-color
+      box-shadow: 0px 0px 10px 0px tokens.$dark-timeline-highlight-glow-color 
 
     h2
       button .permalink-popup
-      color: $dark-main-color
+      color: tokens.$dark-main-color
 
       a
-        color: $dark-main-color
+        color: tokens.$dark-main-color
 
     .entry-footer
-      border-color: $dark-timeline-line-color
-      background-color: $dark-card-footer-background
+      border-color: tokens.$dark-timeline-line-color
+      background-color: tokens.$dark-card-footer-background
 
       button
-        color: $dark-link-color
+        color: tokens.$dark-link-color
 
       .collection-row
-        border-bottom-color: $dark-timeline-line-color
+        border-bottom-color: tokens.$dark-timeline-line-color
 
   .timeline::before
-    background-color: $dark-timeline-line-color
+    background-color: tokens.$dark-timeline-line-color
 
   .timeline-icon
-    border-color: $dark-timeline-line-color
-    color: $dark-timeline-icon-color
+    border-color: tokens.$dark-timeline-line-color
+    color: tokens.$dark-timeline-icon-color
 
     img
       filter: brightness(80%)
 
   .timeline-icon
-    @each $name, $color in $icon-colors
+    @each $name, $color in tokens.$icon-colors
       &.#{$name}
-        background-color: darken($color, 20%)
+        background-color: color.adjust($color, $lightness: -20%)
   
   .load-top
     button, a.button
-      color: $dark-timeline-icon-color
-      background-color: darken($accent, 20%)
+      color: tokens.$dark-timeline-icon-color
+      background-color: color.adjust(tokens.$accent, $lightness: -20%)
 
   .timeline.dots::before
-    background: linear-gradient(180deg, $dark-timeline-line-color 25%, $dark-main-background 25%, $dark-main-background 50%, $dark-timeline-line-color 50%, $dark-timeline-line-color 75%, $dark-main-background 75%, $dark-main-background 100%)  
+    background: linear-gradient(180deg, tokens.$dark-timeline-line-color 25%, tokens.$dark-main-background 25%, tokens.$dark-main-background 50%, tokens.$dark-timeline-line-color 50%, tokens.$dark-timeline-line-color 75%, tokens.$dark-main-background 75%, tokens.$dark-main-background 100%)  
 
   .timeline-description
     &:after
-      background-color: $dark-card-background
-      border-color: $dark-timeline-line-color
+      background-color: tokens.$dark-card-background
+      border-color: tokens.$dark-timeline-line-color
       
     &.highlighted
-      border-color: $dark-timeline-highlight-color 
+      border-color: tokens.$dark-timeline-highlight-color 
 
       &::after
-        border-color: $dark-timeline-highlight-color
+        border-color: tokens.$dark-timeline-highlight-color
 
   // Contribute
   table
-    border-color: $dark-timeline-line-color
+    border-color: tokens.$dark-timeline-line-color
 
     th, td
-      border-color: $timeline-line-color
+      border-color: tokens.$timeline-line-color
 
   .donations-bar
-    color: $main-text-color
+    color: tokens.$main-text-color
 
   // Glossary
   .glossary-entry, .faq-entry
     &.highlighted
-      background-color: $dark-highlight-background
+      background-color: tokens.$dark-highlight-background
+
+@mixin navigationDarkMode()
+  .navigation-bar-wrapper
+    background-color: tokens.$dark-navigation-background
+
+    .navigation-entry
+      color: tokens.$dark-header-footer-body-color
+
+      &.active-navigation-entry
+        background-color: tokens.$dark-header-footer-background
+
+      &:hover
+        background-color: tokens.$dark-navigation-background-highlight
+
+    .navigation-menu
+      background-color: tokens.$dark-navigation-background
+
+      li a
+        color: tokens.$dark-header-footer-body-color
+
+      .active-menu-item
+        background-color: tokens.$dark-navigation-background-highlight
+
+  .mobile-navigation-toggle
+    color: tokens.$dark-header-footer-body-color
+
+    svg.hamburger-icon
+      fill: tokens.$dark-header-footer-body-color
+
+  .mobile-navigation-menu
+    background-color: tokens.$dark-filterbar-background
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.8)
+
+    li > a:hover
+      background-color: tokens.$dark-highlight-background
+
+    .mobile-navigation-toggle
+      color: tokens.$dark-filter-text
+
+@mixin filtersDarkMode()
+  .timeline-filter-wrapper
+    background-color: tokens.$dark-filterbar-background
+    color: tokens.$dark-filter-text
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1)
+
+  .timeline-filter
+    .expand-filters-button, .sort-button
+      color: tokens.$dark-filter-text
+
+      &:disabled
+        color: tokens.$dark-filter-text
+
+    .filters-expandable
+      border-color: tokens.$dark-timeline-line-color
+
+  .filter-select
+
+    >div
+      background-color: tokens.$dark-lightbox-background
+      border-color: tokens.$dark-timeline-line-color
+
+    div[class*="-control"]
+      border-color: tokens.$dark-card-background !important
+      box-shadow: tokens.$dark-card-background !important
+
+    div[class*="-placeholder"],  div[class*="-singleValue"]
+      color: tokens.$dark-filter-text
+
+    div[class*="-indicatorContainer"]:hover
+      color: #666666
+
+    div[class*="-menu"] div[class*="option"]
+      background-color: tokens.$dark-lightbox-background
+      cursor: pointer
+
+      &:hover, &:active
+        background-color: tokens.$dark-card-background
+
+  .search-group
+    .search-input
+      background-color: tokens.$dark-lightbox-background
+      color: tokens.$dark-filter-text
+      border-color: tokens.$dark-timeline-line-color
+
+      &::placeholder
+        color: tokens.$dark-filter-text
+
+      &:focus-visible
+        outline-style: solid
+
+    .search-results-menu
+      background-color: tokens.$dark-lightbox-background
+      border: 1px solid tokens.$dark-filterbar-border
+      scrollbar-color: #606060 tokens.$dark-lightbox-background
+
+    .search-result
+      &:not(:last-child)
+        border-bottom-color: tokens.$dark-filterbar-border
+
+      &.highlighted
+        background-color: tokens.$dark-card-background
+
+@mixin fixedDarkMode()
+  .grift-counter, .fixed-at-bottom-button
+    filter: brightness(80%)
+
+  .settings-panel
+    background-color: tokens.$dark-lightbox-background
+    color: tokens.$dark-main-color
+
+    button
+      color: tokens.$dark-main-color
+
+@mixin popoversDarkMode()
+  .definition-popover,
+  .lightbox-container
+    background-color: tokens.$dark-lightbox-background
+    color: tokens.$dark-main-color
+
+    button
+      color: tokens.$dark-main-color
+
+    a
+      color: tokens.$dark-link-color
+
+  .definition-popover
+    border-color: tokens.$timestamp-color
+
+    .arrow::before
+      border-color: tokens.$timestamp-color
+
+  .define-target
+    color: tokens.$dark-main-color
+    border-bottom: 0.0625em dashed rgba(tokens.$dark-main-color, .75)
+
+@mixin chartsDarkMode()
+  .chart-page
+    table.leaderboard
+      background-color: tokens.$dark-card-background
+      color: tokens.$dark-main-color
+
+      tbody
+        tr:hover
+          background-color: tokens.$dark-highlight-background
+
+    .date-picker .date-picker-toggle-button, .leaderboard-paginator button
+      color: tokens.$dark-filter-text
+      border-color: tokens.$timeline-line-color
+      background-color: tokens.$dark-lightbox-background
+
+@mixin reactDateRangeDarkMode()
+  .date-picker-menu
+    border: 1px solid tokens.$timeline-line-color
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1)
+
+    .rdrDateRangePickerWrapper, .rdrDefinedRangesWrapper, .rdrStaticRange, .rdrCalendarWrapper, .rdrDateDisplayItem
+      background-color: tokens.$dark-lightbox-background
+
+    .rdrDateDisplayWrapper, .rdrNextPrevButton, .rdrMonthAndYearPickers select:hover.rdrStaticRange:hover, .rdrStaticRange:hover .rdrStaticRangeLabel, .rdrStaticRange:focus, .rdrStaticRange:focus .rdrStaticRangeLabel
+      background-color: tokens.$dark-filterbar-background
+
+    .rdrNextPrevButton:hover, .rdrStaticRange:hover .rdrStaticRangeLabel, .rdrStaticRange:focus .rdrStaticRangeLabel
+      background-color: tokens.$dark-filterbar-border
+
+    .rdrDateDisplayItemActive
+      color: #666 !important
+
+    .rdrMonthAndYearPickers, .rdrMonthAndYearPickers select, .rdrDayNumber span
+      color: tokens.$dark-main-color
+
+    .rdrDateDisplayItem input, .rdrWeekDay
+      color: color.adjust(tokens.$timestamp-color, $lightness: 20%)
+
+    .rdrDayPassive .rdrDayNumber span
+      color: tokens.$timestamp-color
+
+    .rdrMonthAndYearPickers select
+      border: 1px solid #666
+
+    .rdrStaticRange
+      color: tokens.$dark-main-color
+      border-bottom-color: #666
+
+    .rdrDefinedRangesWrapper
+      border-right-color: #666
+
+      .rdrStaticRangeSelected
+        color: tokens.$dark-header-footer-link-color !important
+        background-color: tokens.$dark-filterbar-background
+
+    .rdrPprevButton i
+      border-color: transparent tokens.$dark-main-color transparent transparent
+
+    .rdrNextButton
+      i
+        border-color: transparent transparent transparent tokens.$dark-main-color
 
 .use-dark
-  background-color: $dark-main-background
+  background-color: tokens.$dark-main-background
   @include mainDarkMode()
   @include navigationDarkMode()
   @include filtersDarkMode()
@@ -1101,7 +1300,7 @@ table
 
 .use-system
   @media (prefers-color-scheme: dark)
-    background-color: $dark-main-background
+    background-color: tokens.$dark-main-background
     @include mainDarkMode()
     @include navigationDarkMode()
     @include filtersDarkMode()

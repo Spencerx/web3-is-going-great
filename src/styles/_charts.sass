@@ -1,4 +1,4 @@
-@import _tokens
+@use "_tokens"
 
 .chart-page
   width: 90%
@@ -7,7 +7,7 @@
   padding: 20px 0
 
   table.leaderboard
-    background-color: $card-background
+    background-color: tokens.$card-background
 
     th, td
       padding: 10px
@@ -23,7 +23,7 @@
 
     tbody
       tr:not(.loading-row):hover
-        background-color: $chart-highlight-background
+        background-color: tokens.$chart-highlight-background
         cursor: pointer
 
       .loading-wrapper
@@ -33,7 +33,7 @@
       .empty-row
         text-align: center
         font-style: italic
-        color: $timestamp-color
+        color: tokens.$timestamp-color
 
   .table-filters
     display: flex
@@ -52,8 +52,8 @@
       display: flex
       align-items: center
       justify-content: center
-      background-color: $card-background
-      border: 1px solid $main-text-color
+      background-color: tokens.$card-background
+      border: 1px solid tokens.$main-text-color
       width: 30px
       height: 30px
 
@@ -72,30 +72,14 @@
     margin-right: 10px
 
   .date-picker-toggle-button
-    border: 1px solid $main-text-color
-    background-color: $card-background
+    border: 1px solid tokens.$main-text-color
+    background-color: tokens.$card-background
     padding: 5px
 
-@media only screen and (max-width: #{$sm-breakpoint}px)
+@media only screen and (max-width: #{tokens.$sm-breakpoint}px)
   .chart-page
     width: 100%
     margin: 0
 
     .table-filters, .scam-total
       margin: 10px
-
-// Dark mode
-@mixin chartsDarkMode()
-  .chart-page
-    table.leaderboard
-      background-color: $dark-card-background
-      color: $dark-main-color
-
-      tbody
-        tr:hover
-          background-color: $dark-highlight-background
-
-    .date-picker .date-picker-toggle-button, .leaderboard-paginator button
-      color: $dark-filter-text
-      border-color: $timeline-line-color
-      background-color: $dark-lightbox-background

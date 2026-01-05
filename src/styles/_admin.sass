@@ -1,4 +1,4 @@
-@import _tokens
+@use "_tokens"
 
 .admin
   .generic-page
@@ -17,7 +17,7 @@
       align-self: flex-start
       padding: 5px
       margin-top: 10px
-      background-color: $card-background
+      background-color: tokens.$card-background
       border: 1px solid #000000
 
       &:not(:first-of-type)

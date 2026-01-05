@@ -1,12 +1,13 @@
+import * as logger from "firebase-functions/logger";
+import { onDocumentWritten } from "firebase-functions/v2/firestore";
 import { firestore, storage } from "./config/firebase";
-import * as functions from "firebase-functions";
 
-import * as path from "path";
-import * as fs from "fs";
 import * as ejs from "ejs";
+import * as fs from "fs";
+import * as path from "path";
 
-import { Entry, RssEntry } from "./types";
 import axios from "axios";
+import { Entry, RssEntry } from "./types";
 
 const STORAGE_URL_PREFIX = "https://primary-cdn.web3isgoinggreat.com";
 const STATIC_STORAGE_URL_PREFIX = "https://static-cdn.web3isgoinggreat.com";
@@ -18,9 +19,12 @@ const writeFeed = async (xml: string): Promise<void> => {
   });
 };
 
-export const updateRssOnChange = functions.firestore
-  .document("/entries/{docId}")
-  .onWrite(async () => {
+export const updateRssOnChange = onDocumentWritten(
+  {
+    document: "/entries/{docId}",
+    region: "us-central1",
+  },
+  async () => {
     const snapshot = await firestore
       .collection("entries")
       .orderBy("id", "desc")
@@ -83,7 +87,7 @@ export const updateRssOnChange = functions.firestore
     } catch (err) {
       // validator.w3.org has been going offline once in a while lately, which shouldn't
       // also take down the RSS feed for this site
-      functions.logger.warn(
+      logger.warn(
         "Something went wrong with XML validation; proceeding to write feed.",
         err
       );
@@ -97,11 +101,12 @@ export const updateRssOnChange = functions.firestore
       resp.data.search(/<m:validity>\s*true\s*<\/m:validity>/gm) > -1
     ) {
       // Valid XML, carry on
-      functions.logger.debug("Writing feed...");
+      logger.debug("Writing feed...");
       await writeFeed(xml);
     } else {
-      functions.logger.error("Invalid XML");
+      logger.error("Invalid XML");
       // Throw to be picked up by alerting in GCP
       throw new Error("Invalid XML");
     }
-  });
+  }
+);

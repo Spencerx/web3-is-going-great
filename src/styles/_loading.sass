@@ -1,4 +1,4 @@
-@import _tokens
+@use "_tokens"
 
 .loading-wrapper
   width: 100px
@@ -7,7 +7,7 @@
 .loading-animation
   font-family: 'Press Start 2P'
   font-size: 30px
-  color: $accent
+  color: tokens.$accent
   text-shadow: 2px 2px rgba(0, 0, 0, 0.2)
 
   &::after

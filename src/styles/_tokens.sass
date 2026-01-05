@@ -1,3 +1,4 @@
+@use "sass:color"
 $display-font: 'Press Start 2P'
 $body-font: 'Source Code Pro'
 $sans-serif-body-font: 'Atkinson Hyperlegible'
@@ -22,9 +23,9 @@ $card-footer-background: #f9f9f9
 $highlight-background: #cccccc
 $chart-highlight-background: #efefef
 
-$dark-header-footer-background: darken($accent, 30%)
-$dark-navigation-background: darken($accent, 20%)
-$dark-navigation-background-highlight: darken($accent,10%)
+$dark-header-footer-background: color.adjust($accent, $lightness: -30%)
+$dark-navigation-background: color.adjust($accent, $lightness: -20%)
+$dark-navigation-background-highlight: color.adjust($accent,$lightness: -10%)
 $dark-main-background: #222222
 $dark-card-background: #333333
 $dark-card-footer-background: #292929
@@ -37,9 +38,9 @@ $dark-highlight-background: #444444
 // Header and footer
 $title-color: #ffffff
 $header-footer-body-color: #eeeeee
-$header-footer-link-color: lighten($accent, 70%)
-$dark-header-footer-body-color: desaturate(lighten($accent, 30%), 40%)
-$dark-header-footer-link-color: lighten($accent, 30%)
+$header-footer-link-color: color.adjust($accent, $lightness: 70%)
+$dark-header-footer-body-color: color.adjust(color.adjust($accent, $lightness: 30%), $saturation: -40%)
+$dark-header-footer-link-color: color.adjust($accent, $lightness: 30%)
 
 // Main
 $main-text-color: #000000
@@ -47,13 +48,13 @@ $main-link-color: $accent
 $timestamp-color: #888888
 
 $dark-main-color: #cccccc
-$dark-link-color: lighten($accent, 30%)
+$dark-link-color: color.adjust($accent, $lightness: 30%)
 
 // Filter
 $filterbar-background: #ffffff
 $filterbar-border: #cccccc
 $filterbar-icon: #333333
-$filter-highlight: lighten($accent, 40%)
+$filter-highlight: color.adjust($accent, $lightness: 40%)
 $filter-text: #000000
 $dark-filter-text: $dark-main-color
 
@@ -61,7 +62,7 @@ $dark-filter-text: $dark-main-color
 $timeline-line-color: #cccccc
 $timeline-icon-color: #ffffff
 $timeline-highlight-color: $accent
-$timeline-highlight-glow-color: lighten($accent, 20%)
+$timeline-highlight-glow-color: color.adjust($accent, $lightness: 20%)
 
 $dark-timeline-line-color: #444444
 $dark-timeline-icon-color: #cccccc

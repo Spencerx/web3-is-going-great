@@ -2,7 +2,9 @@ import PropTypes from "prop-types";
 import { STORAGE_URL } from "../constants/urls";
 import Image from "next/image";
 
-export default function Error({ customMessage }) {
+export default function Error({
+  customMessage = "Something went wrong. Molly would greatly appreciate it if you made sure she knows."
+}) {
   return (
     <div className="error-wrapper">
       <div>
@@ -21,9 +23,4 @@ export default function Error({ customMessage }) {
 
 Error.propTypes = {
   customMessage: PropTypes.node,
-};
-
-Error.defaultProps = {
-  customMessage:
-    "Something went wrong. Molly would greatly appreciate it if you made sure she knows.",
 };

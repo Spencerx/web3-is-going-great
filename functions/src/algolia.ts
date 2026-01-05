@@ -1,9 +1,11 @@
-import * as functions from "firebase-functions";
+import { onCall } from "firebase-functions/v2/https";
 import { AlgoliaEntry } from "./types";
 
-export const transformEntryForSearch = functions
-  .region("us-central1")
-  .https.onCall(async (data: AlgoliaEntry) => {
+export const transformEntryForSearch = onCall(
+  { region: "us-central1" }, // Configuration object
+  async (request) => {
+    const data: AlgoliaEntry = request.data;
+
     return {
       objectID: data.objectID, // Required for Algolia
       id: data.id,
@@ -16,4 +18,5 @@ export const transformEntryForSearch = functions
       collection: data.collection,
       theme: data.filters.theme,
     };
-  });
+  }
+);

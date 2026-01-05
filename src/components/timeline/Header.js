@@ -13,7 +13,7 @@ import MobileNavigation from "../navigation/MobileNavigation";
 import NoJsNavigation from "../navigation/NoJsNavigation";
 
 const Header = forwardRef(function Header(
-  { windowWidth, isBrowserRendering, clearAllFiltering },
+  { windowWidth, isBrowserRendering, clearAllFiltering, _nojs = false },
   ref
 ) {
   const componentRef = useRef();
@@ -141,10 +141,6 @@ Header.propTypes = {
   nojs: PropTypes.bool,
   isBrowserRendering: PropTypes.bool,
   clearAllFiltering: PropTypes.func,
-};
-
-Header.defaultProps = {
-  nojs: false,
 };
 
 export default Header;

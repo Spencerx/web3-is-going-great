@@ -1,4 +1,4 @@
-@import _tokens
+@use "_tokens"
 
 .lightbox-container
   position: fixed
@@ -10,7 +10,7 @@
   max-width: 90%
   max-height: 90%
   margin: 0 auto
-  background-color: $card-background
+  background-color: tokens.$card-background
   display: flex
   flex-direction: column
   align-items: center
@@ -36,8 +36,8 @@
     align-self: flex-end
 
 .define-target
-  color: $main-text-color
-  border-bottom: 0.0625em dashed rgba($main-text-color, .5)
+  color: tokens.$main-text-color
+  border-bottom: 0.0625em dashed rgba(tokens.$main-text-color, .5)
   cursor: pointer
 
   &:hover
@@ -45,7 +45,7 @@
     text-decoration: none
 
 .definition-popover
-  background-color: $card-background
+  background-color: tokens.$card-background
   padding: 10px
   margin: 0
   display: block
@@ -99,25 +99,3 @@
     &::before
       border-right-width: 0
       border-top-width: 0
-
-@mixin popoversDarkMode()
-  .definition-popover,
-  .lightbox-container
-    background-color: $dark-lightbox-background
-    color: $dark-main-color
-
-    button
-      color: $dark-main-color
-
-    a
-      color: $dark-link-color
-
-  .definition-popover
-    border-color: $timestamp-color
-
-    .arrow::before
-      border-color: $timestamp-color
-
-  .define-target
-    color: $dark-main-color
-    border-bottom: 0.0625em dashed rgba($dark-main-color, .75)

@@ -1,15 +1,17 @@
-import { storage } from "./config/firebase";
-import { ObjectMetadata } from "firebase-functions/v1/storage";
+import { getStorage } from "firebase-admin/storage";
+import {
+  onObjectFinalized,
+  StorageObjectData,
+} from "firebase-functions/v2/storage";
 
-import * as fs from "fs";
 import * as functions from "firebase-functions";
+import * as fs from "fs";
 import { mkdirp } from "mkdirp";
 import * as os from "os";
 import * as path from "path";
 import * as sharp from "sharp";
 
 import { ResizeResult } from "./types";
-import { Bucket } from "@google-cloud/storage";
 
 const supportedContentTypes = [
   "image/jpeg",
@@ -18,19 +20,28 @@ const supportedContentTypes = [
   "image/webp",
 ];
 
+// Get the correct Bucket type from the storage instance
+type Bucket = ReturnType<typeof getStorage>["bucket"] extends (
+  bucketName?: string
+) => infer B
+  ? B
+  : never;
+
+interface ResizeImageParams {
+  bucket: Bucket;
+  originalImage: string;
+  size: number;
+  object: StorageObjectData;
+  fileName: string;
+}
+
 const resizeImage = async ({
   bucket,
   originalImage,
   size,
   object,
   fileName,
-}: {
-  bucket: Bucket;
-  originalImage: string;
-  size: number;
-  object: ObjectMetadata;
-  fileName: string;
-}): Promise<ResizeResult> => {
+}: ResizeImageParams): Promise<ResizeResult> => {
   const imageDirectory = path.dirname(fileName);
   const imageName = path.basename(fileName, path.extname(fileName));
   const targetImageName = `${imageName}_${size}.webp`;
@@ -85,16 +96,19 @@ const resizeImage = async ({
   }
 };
 
-export const onImageUpload = functions.storage
-  .bucket("primary-web3-regional")
-  .object()
-  .onFinalize(async (object) => {
+export const onImageUpload = onObjectFinalized(
+  {
+    bucket: "primary-web3-regional",
+    region: "us-central1", // Add your preferred region
+  },
+  async (event) => {
+    const object = event.data;
+
     if (
       !object.contentType ||
       !object.contentType.startsWith("image/") ||
       !supportedContentTypes.includes(object.contentType)
     ) {
-      // Can't or don't need to process this image
       return;
     }
 
@@ -105,12 +119,12 @@ export const onImageUpload = functions.storage
       paths[0] !== "entryImages" ||
       paths.some((pathGroup) => pathGroup === "resized")
     ) {
-      // Not in a folder where images should be auto-resized
       return;
     }
 
+    const storage = getStorage(); // Use Admin SDK
     const bucket = storage.bucket(object.bucket);
-    const fileName = object.name as string; // We know this exists from the above check
+    const fileName = object.name as string;
 
     const originalImage = path.join(os.tmpdir(), fileName);
     const tempDirectory = path.dirname(originalImage);
@@ -142,4 +156,5 @@ export const onImageUpload = functions.storage
         functions.logger.warn("Error while deleting original image file", err);
       }
     }
-  });
+  }
+);

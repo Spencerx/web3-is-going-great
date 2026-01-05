@@ -1,8 +1,9 @@
-import { firestore } from "./config/firebase";
-import * as functions from "firebase-functions";
+import { DocumentData, FieldPath } from "firebase-admin/firestore";
 import { Change } from "firebase-functions";
 import { DocumentSnapshot } from "firebase-functions/v1/firestore";
-import { DocumentData, FieldPath } from "firebase-admin/firestore";
+import { onDocumentWritten } from "firebase-functions/v2/firestore";
+import { onRequest } from "firebase-functions/v2/https";
+import { firestore } from "./config/firebase";
 
 interface MetadataUpdate {
   entryCount?: number;
@@ -45,9 +46,18 @@ const getGriftChange = async (change: Change<DocumentSnapshot>) => {
   return griftChange;
 };
 
-export const updateMetadata = functions.firestore
-  .document("/entries/{docId}")
-  .onWrite(async (change) => {
+export const updateMetadata = onDocumentWritten(
+  {
+    document: "/entries/{docId}",
+    region: "us-central1", // Add your preferred region
+  },
+  async (event) => {
+    const change = event.data;
+
+    if (!change) {
+      return;
+    }
+
     const metadataDocRef = await firestore
       .collection("metadata")
       .doc("metadata");
@@ -76,9 +86,11 @@ export const updateMetadata = functions.firestore
     if (Object.keys(update).length > 0) {
       await metadataDocRef.update({ ...update });
     }
-  });
+  }
+);
 
-export const recalculateGriftTotal = functions.https.onRequest(
+export const recalculateGriftTotal = onRequest(
+  { region: "us-central1" },
   async (req, res) => {
     const entriesDb = await firestore.collection("entries");
     const entriesSnapshot = await entriesDb
@@ -99,7 +111,8 @@ export const recalculateGriftTotal = functions.https.onRequest(
   }
 );
 
-export const recalculateEntryCount = functions.https.onRequest(
+export const recalculateEntryCount = onRequest(
+  { region: "us-central1" },
   async (req, res) => {
     const entriesSnapshot = await firestore.collection("entries").get();
 
@@ -111,10 +124,13 @@ export const recalculateEntryCount = functions.https.onRequest(
   }
 );
 
-export const getEntryCount = functions.https.onRequest(async (req, res) => {
-  const entriesSnapshot = await firestore
-    .collection("entries")
-    .where("date", "<", "2022-01-01")
-    .get();
-  res.send({ size: entriesSnapshot.size });
-});
+export const getEntryCount = onRequest(
+  { region: "us-central1" },
+  async (req, res) => {
+    const entriesSnapshot = await firestore
+      .collection("entries")
+      .where("date", "<", "2022-01-01")
+      .get();
+    res.send({ size: entriesSnapshot.size });
+  }
+);

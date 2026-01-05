@@ -30,7 +30,7 @@ export default function Entry({
   className,
   windowWidth,
   glossary,
-  runningScamTotal,
+  runningScamTotal = 0,
   currentRunningScamTotal,
   setCurrentRunningScamTotal,
   collection,
@@ -484,8 +484,4 @@ Entry.propTypes = {
   allCollections: PropTypes.object, // Not defined in web1
   setCollection: PropTypes.func, // Not defined in web1
   setStarred: PropTypes.func, // Not defined in web1
-};
-
-Entry.defaultProps = {
-  runningScamTotal: 0,
 };

@@ -1,6 +1,6 @@
 import Head from "next/head";
 import PropTypes from "prop-types";
-import ReactGA from "react-ga";
+import ReactGA from "react-ga4";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Layout from "../components/Layout";
 import { AppProvider } from "../context/AppContext";
